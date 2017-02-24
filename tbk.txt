@@ -1,0 +1,15 @@
+图片链接 pictUrl
+宝贝链接 auctionUrl
+商品ID   auctionId
+商品标题 title
+店铺名称 shopTitle
+原始价格 reservePrice
+促销价格 zkPrice
+30天销量 biz30day
+活动比例 eventRate
+利润金额 tkCommFee
+优惠券面值 couponAmount
+优惠券门槛 couponStartFee
+优惠券信息 couponInfo
+剩余优惠券 couponLeftCount
+结束时间 couponEffectiveEndTime
