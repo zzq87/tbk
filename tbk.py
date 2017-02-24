@@ -11,10 +11,10 @@ with sqlite3.connect('tbk.db') as con:
     cur.execute('create table tbk(id integer primary key autoincrement,title varchar,\
     auctionId varchar,zkPrice int,couponAmount int,couponInfo varchar)')
     def catch_json():
-        for i in range(10):
+        for i in range(100):
             print(i)
-            r = requests.get('''http://pub.alimama.com/items/channel/qqhd.json?channel=qqhd&toPage={}&dpyhq=1
-                     &perPageSize=40&shopTag=dpyhq'''.format(i), headers=headers).text
+            r = requests.get('''http://pub.alimama.com/items/channel/qqhd.json?channel=qqhd&toPage={}&\
+dpyhq=1&perPageSize=100&shopTag=dpyhq'''.format(i), headers=headers).text
             dj = json.loads(r)['data']['pageList']
             for i in dj:
                 title = str(i['title'])
@@ -26,7 +26,7 @@ with sqlite3.connect('tbk.db') as con:
             con.commit()
 
     def l():
-        cur.execute('select * from tbk where couponAmount > 10 and zkPrice < 50 ')
+        cur.execute('select * from tbk where couponAmount > 20 and zkPrice < 40 ')
         d = cur.fetchall()
         for i in d:
             print(i)
