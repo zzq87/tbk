@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import requests
 import json
 import sqlite3
@@ -17,11 +18,11 @@ with sqlite3.connect('tbk.db') as con:
 dpyhq=1&perPageSize=100&shopTag=dpyhq'''.format(i), headers=headers).text
             dj = json.loads(r)['data']['pageList']
             for i in dj:
-                title = str(i['title'])
-                auctionId = str(i['auctionId'])
-                zkPrice = int(i['zkPrice'])
-                couponAmount = int(i['couponAmount'])
-                couponinfo = str(i['couponInfo'])
+                title = str(i['title']) #商品标题
+                auctionId = str(i['auctionId']) #商品ID
+                zkPrice = int(i['zkPrice']) #折扣价格
+                couponAmount = int(i['couponAmount']) #优惠券面额
+                couponinfo = str(i['couponInfo']) #优惠券信息
                 cur.execute("insert into tbk(id,title,auctionId,zkPrice,couponAmount,couponInfo)values(null,'{}','{}','{}','{}','{}')".format(title.replace("'", ''), auctionId, zkPrice, couponAmount, couponinfo))
             con.commit()
 
