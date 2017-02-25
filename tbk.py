@@ -41,10 +41,10 @@ dpyhq=1&perPageSize=100&shopTag=dpyhq'''.format(p), headers=headers).text
                     couponinfo = str(i['couponInfo'])  #优惠券信息
                     auctionUrl = str(i['auctionUrl'])  #宝贝链接
                     pictUrl = str(i['pictUrl'])  #主图链接
-                    cur.execute("insert into tbk(id,title,shopTitle,auctionId,zkPrice,eventRate,tkCommFee,dayLeft,couponAmount,endTime,\
-                    couponInfo,auctionUrl,pictUrl)values(null,'{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}',\
-                    '{}')".format(title.replace("'", ''), shopTitle.replace("'", '-'), auctionId, zkPrice, eventRate,
-                                  tkCommFee, dayLeft, couponAmount, endTime, couponinfo, auctionUrl, pictUrl))
+                    cur.execute("insert into tbk(id,title,shopTitle,auctionId,zkPrice,eventRate,tkCommFee,dayLeft,\
+                    couponAmount,endTime, couponInfo,auctionUrl,pictUrl)values(null,'{}','{}','{}','{}','{}','{}',\
+                    '{}','{}','{}','{}','{}','{}')".format(title.replace("'", ''), shopTitle.replace("'", '-'),
+            auctionId, zkPrice, eventRate, tkCommFee, dayLeft, couponAmount, endTime, couponinfo, auctionUrl, pictUrl))
                 con.commit()
             except requests.exceptions as e:
                 print('requests.exceptions', e)
