@@ -13,35 +13,40 @@ headers = {
 with sqlite3.connect('tbk.db') as con:
     cur = con.cursor()
     cur.execute('create table tbk(id integer primary key autoincrement,title varchar,\
-    auctionId varchar,zkPrice FLOAT,eventRate FLOAT,tkCommFee FLOAT,dayLeft int,couponAmount int,endTime varchar,\
+    shopTitle text,auctionId varchar,zkPrice FLOAT,eventRate FLOAT,tkCommFee FLOAT,dayLeft int,couponAmount int,endTime varchar,\
     couponInfo varchar,auctionUrl text,pictUrl text)')
-
-    '''条目ID，商品标题，商品ID，折扣价格，佣金比例，利润金额，剩余天数，优惠券面额，优惠券有效期，优惠券信息'''
+    
+    '''条目ID，商品标题，店铺名称，商品ID，折扣价格，佣金比例，利润金额，剩余天数，优惠券面额，优惠券有效期，优惠券信息'''
     def catch_json():
         for i in range(1,101):
-            print(i)
-            r = requests.get('''http://pub.alimama.com/items/channel/qqhd.json?channel=qqhd&toPage={}&\
+            try:
+                print(i)
+                r = requests.get('''http://pub.alimama.com/items/channel/qqhd.json?channel=qqhd&toPage={}&\
 dpyhq=1&perPageSize=100&shopTag=dpyhq'''.format(i), headers=headers).text
-            dj = json.loads(r)['data']['pageList']
-            for i in dj:
-                title = str(i['title']) #商品标题
-                auctionId = str(i['auctionId']) #商品ID
-                zkPrice = float(i['zkPrice']) #折扣价格
-                eventRate = float(i['eventRate']) #佣金比例
-                tkCommFee = float(i['tkCommFee']) #利润金额
-                dayLeft = int(i['dayLeft']) #剩余天数
-                couponAmount = int(i['couponAmount']) #优惠券面额
-                endTime = str(i['couponEffectiveEndTime']) #优惠券有效期
-                couponinfo = str(i['couponInfo']) #优惠券信息
-                auctionUrl = str(i['auctionUrl']) #宝贝链接
-                pictUrl = str(i['pictUrl']) #主图链接
-                cur.execute("insert into tbk(id,title,auctionId,zkPrice,eventRate,tkCommFee,dayLeft,couponAmount,endTime,\
-                couponInfo,auctionUrl,pictUrl)values(null,'{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(title.replace("'", ''), \
-                auctionId,zkPrice,eventRate,tkCommFee,dayLeft,couponAmount,endTime,couponinfo,auctionUrl,pictUrl))
-            con.commit()
+                dj = json.loads(r)['data']['pageList']
+                for i in dj:
+                    title = str(i['title']) #商品标题
+                    shopTitle = str(i['shopTitle']) #店铺名称
+                    print(shopTitle)
+                    auctionId = str(i['auctionId']) #商品ID
+                    zkPrice = float(i['zkPrice']) #折扣价格
+                    eventRate = float(i['eventRate']) #佣金比例
+                    tkCommFee = float(i['tkCommFee']) #利润金额
+                    dayLeft = int(i['dayLeft']) #剩余天数
+                    couponAmount = int(i['couponAmount']) #优惠券面额
+                    endTime = str(i['couponEffectiveEndTime']) #优惠券有效期
+                    couponinfo = str(i['couponInfo']) #优惠券信息
+                    auctionUrl = str(i['auctionUrl']) #宝贝链接
+                    pictUrl = str(i['pictUrl']) #主图链接
+                    cur.execute("insert into tbk(id,title,shopTitle,auctionId,zkPrice,eventRate,tkCommFee,dayLeft,couponAmount,endTime,\
+                    couponInfo,auctionUrl,pictUrl)values(null,'{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(title.replace("'", ''), \
+                    shopTitle.replace("'", '-'),auctionId,zkPrice,eventRate,tkCommFee,dayLeft,couponAmount,endTime,couponinfo,auctionUrl,pictUrl))
+                con.commit()
+            except requests.exceptions as e:
+                print('requests.exceptions')
 
     def l():
-        cur.execute('select * from tbk where couponAmount > 10 and zkPrice < 30 ')
+        cur.execute('select title,zkPrice,eventRate,tkCommFee,couponinfo from tbk where couponAmount > 30 and zkPrice < 60 and eventRate>50')
         d = cur.fetchall()
         for i in d:
             print(i)
