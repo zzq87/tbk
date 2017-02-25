@@ -7,9 +7,10 @@
 促销价格 zkPrice
 30天销量 biz30day
 活动比例 eventRate
+活动期限 dayLeft
 利润金额 tkCommFee
 优惠券面值 couponAmount
 优惠券门槛 couponStartFee
 优惠券信息 couponInfo
 剩余优惠券 couponLeftCount
-结束时间 couponEffectiveEndTime
+优惠券有效期 couponEffectiveEndTime
