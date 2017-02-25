@@ -12,9 +12,9 @@ headers = {
     }
 with sqlite3.connect('tbk.db') as con:
     cur = con.cursor()
-    cur.execute('create table tbk(id integer primary key autoincrement,title varchar,\
+    '''cur.execute('create table tbk(id integer primary key autoincrement,title varchar,\
     shopTitle text,auctionId varchar,zkPrice FLOAT,eventRate FLOAT,tkCommFee FLOAT,dayLeft int,couponAmount int,endTime varchar,\
-    couponInfo varchar,auctionUrl text,pictUrl text)')
+    couponInfo varchar,auctionUrl text,pictUrl text)')'''
     
     '''条目ID，商品标题，店铺名称，商品ID，折扣价格，佣金比例，利润金额，剩余天数，优惠券面额，优惠券有效期，优惠券信息'''
     def catch_json():
@@ -27,7 +27,7 @@ dpyhq=1&perPageSize=100&shopTag=dpyhq'''.format(i), headers=headers).text
                 for i in dj:
                     title = str(i['title']) #商品标题
                     shopTitle = str(i['shopTitle']) #店铺名称
-                    print(shopTitle)
+                    #print(shopTitle)
                     auctionId = str(i['auctionId']) #商品ID
                     zkPrice = float(i['zkPrice']) #折扣价格
                     eventRate = float(i['eventRate']) #佣金比例
@@ -46,9 +46,9 @@ dpyhq=1&perPageSize=100&shopTag=dpyhq'''.format(i), headers=headers).text
                 print('requests.exceptions')
 
     def l():
-        cur.execute('select title,zkPrice,eventRate,tkCommFee,couponinfo from tbk where couponAmount > 30 and zkPrice < 60 and eventRate>50')
+        cur.execute('select id,title,shopTitle,zkPrice,eventRate,tkCommFee,couponinfo from tbk where couponAmount > 30 and zkPrice < 60 and eventRate>50')
         d = cur.fetchall()
         for i in d:
             print(i)
-    catch_json()
+    #catch_json()
     l()
