@@ -2,6 +2,9 @@
 import requests
 import json
 import sqlite3
+import datetime
+now=datetime.datetime.now()
+today = now.strftime('%Y-%m-%d')
 
 headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)/'
@@ -10,9 +13,12 @@ headers = {
 with sqlite3.connect('tbk.db') as con:
     cur = con.cursor()
     cur.execute('create table tbk(id integer primary key autoincrement,title varchar,\
-    auctionId varchar,zkPrice int,couponAmount int,couponInfo varchar)')
+    auctionId varchar,zkPrice FLOAT,eventRate FLOAT,tkCommFee FLOAT,dayLeft int,couponAmount int,endTime varchar,\
+    couponInfo varchar,auctionUrl text,pictUrl text)')
+
+    '''条目ID，商品标题，商品ID，折扣价格，佣金比例，利润金额，剩余天数，优惠券面额，优惠券有效期，优惠券信息'''
     def catch_json():
-        for i in range(100):
+        for i in range(1,101):
             print(i)
             r = requests.get('''http://pub.alimama.com/items/channel/qqhd.json?channel=qqhd&toPage={}&\
 dpyhq=1&perPageSize=100&shopTag=dpyhq'''.format(i), headers=headers).text
@@ -20,14 +26,22 @@ dpyhq=1&perPageSize=100&shopTag=dpyhq'''.format(i), headers=headers).text
             for i in dj:
                 title = str(i['title']) #商品标题
                 auctionId = str(i['auctionId']) #商品ID
-                zkPrice = int(i['zkPrice']) #折扣价格
+                zkPrice = float(i['zkPrice']) #折扣价格
+                eventRate = float(i['eventRate']) #佣金比例
+                tkCommFee = float(i['tkCommFee']) #利润金额
+                dayLeft = int(i['dayLeft']) #剩余天数
                 couponAmount = int(i['couponAmount']) #优惠券面额
+                endTime = str(i['couponEffectiveEndTime']) #优惠券有效期
                 couponinfo = str(i['couponInfo']) #优惠券信息
-                cur.execute("insert into tbk(id,title,auctionId,zkPrice,couponAmount,couponInfo)values(null,'{}','{}','{}','{}','{}')".format(title.replace("'", ''), auctionId, zkPrice, couponAmount, couponinfo))
+                auctionUrl = str(i['auctionUrl']) #宝贝链接
+                pictUrl = str(i['pictUrl']) #主图链接
+                cur.execute("insert into tbk(id,title,auctionId,zkPrice,eventRate,tkCommFee,dayLeft,couponAmount,endTime,\
+                couponInfo,auctionUrl,pictUrl)values(null,'{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(title.replace("'", ''), \
+                auctionId,zkPrice,eventRate,tkCommFee,dayLeft,couponAmount,endTime,couponinfo,auctionUrl,pictUrl))
             con.commit()
 
     def l():
-        cur.execute('select * from tbk where couponAmount > 20 and zkPrice < 40 ')
+        cur.execute('select * from tbk where couponAmount > 10 and zkPrice < 30 ')
         d = cur.fetchall()
         for i in d:
             print(i)
