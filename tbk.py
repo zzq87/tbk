@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# *-* coding:utf-8 *-*
 import requests
 import json
 import sqlite3
@@ -28,21 +29,22 @@ with sqlite3.connect('tbk.db') as con:
 dpyhq=1&perPageSize=100&shopTag=dpyhq'''.format(p), headers=headers).text
                 dj = json.loads(r)['data']['pageList']
                 for i in dj:
-                    title = str(i['title']) #商品标题
-                    shopTitle = str(i['shopTitle']) #店铺名称
-                    auctionId = str(i['auctionId']) #商品ID
-                    zkPrice = float(i['zkPrice']) #折扣价格
-                    eventRate = float(i['eventRate']) #佣金比例
-                    tkCommFee = float(i['tkCommFee']) #利润金额
-                    dayLeft = int(i['dayLeft']) #剩余天数
-                    couponAmount = int(i['couponAmount']) #优惠券面额
-                    endTime = str(i['couponEffectiveEndTime']) #优惠券有效期
-                    couponinfo = str(i['couponInfo']) #优惠券信息
-                    auctionUrl = str(i['auctionUrl']) #宝贝链接
-                    pictUrl = str(i['pictUrl']) #主图链接
+                    title = str(i['title'])  #商品标题
+                    shopTitle = str(i['shopTitle'])  #店铺名称
+                    auctionId = str(i['auctionId'])  #商品ID
+                    zkPrice = float(i['zkPrice'])  #折扣价格
+                    eventRate = float(i['eventRate'])  #佣金比例
+                    tkCommFee = float(i['tkCommFee'])  #利润金额
+                    dayLeft = int(i['dayLeft'])  #剩余天数
+                    couponAmount = int(i['couponAmount'])  #优惠券面额
+                    endTime = str(i['couponEffectiveEndTime'])  #优惠券有效期
+                    couponinfo = str(i['couponInfo'])  #优惠券信息
+                    auctionUrl = str(i['auctionUrl'])  #宝贝链接
+                    pictUrl = str(i['pictUrl'])  #主图链接
                     cur.execute("insert into tbk(id,title,shopTitle,auctionId,zkPrice,eventRate,tkCommFee,dayLeft,couponAmount,endTime,\
-                    couponInfo,auctionUrl,pictUrl)values(null,'{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(title.replace("'", ''), \
-                    shopTitle.replace("'", '-'), auctionId, zkPrice, eventRate, tkCommFee, dayLeft, couponAmount, endTime, couponinfo, auctionUrl, pictUrl))
+                    couponInfo,auctionUrl,pictUrl)values(null,'{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}',\
+                    '{}')".format(title.replace("'", ''), shopTitle.replace("'", '-'), auctionId, zkPrice, eventRate,
+                                  tkCommFee, dayLeft, couponAmount, endTime, couponinfo, auctionUrl, pictUrl))
                 con.commit()
             except requests.exceptions as e:
                 print('requests.exceptions', e)
@@ -54,6 +56,6 @@ dpyhq=1&perPageSize=100&shopTag=dpyhq'''.format(p), headers=headers).text
         for i in d:
             print(i)
 
-    #creat_tab()
-    #catch_json()
+    creat_tab()
+    catch_json()
     l()
