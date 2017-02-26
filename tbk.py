@@ -51,11 +51,12 @@ dpyhq=1&perPageSize=100&shopTag=dpyhq'''.format(p), headers=headers).text
 
     def l():
         cur.execute('select id,title,shopTitle,zkPrice,eventRate,tkCommFee,couponinfo from tbk where \
-        couponAmount > 30 and zkPrice < 60 and eventRate>50')
+        eventRate>45 and zkPrice < 20')
         d = cur.fetchall()
         for i in d:
-            print(i)
+            if '女' in i[1]:
+                print(i)
 
-    creat_tab()
-    catch_json()
+    #creat_tab()
+    #catch_json()
     l()
