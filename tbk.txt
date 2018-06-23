@@ -14,3 +14,4 @@
 优惠券信息 couponInfo
 剩余优惠券 couponLeftCount
 优惠券有效期 couponEffectiveEndTime
+1
